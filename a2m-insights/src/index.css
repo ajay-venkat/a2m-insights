@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply antialiased font-body;
+    perspective: 1000px;
+  }
+  
+  /* Light mode defaults */
+  body {
+    @apply bg-slate-50 text-slate-900;
+  }
+
+  /* Dark mode overrides */
+  html.dark body {
+    @apply bg-background text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-accent;
+  }
+  
+  .glass-panel {
+    @apply bg-white/70 dark:bg-panel/70 backdrop-blur-[16px] border border-slate-200 dark:border-borderline;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    /* 1px inner-light top border */
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-card {
+    @apply bg-white dark:bg-panel border border-slate-200 dark:border-borderline rounded-2xl transition-all duration-300;
+    /* Soft dynamic shadow */
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .glass-card:hover {
+    @apply shadow-[0_0_15px_rgba(47,107,255,0.15)] dark:shadow-[inset_0_0_20px_rgba(255,255,255,0.02),0_0_15px_rgba(47,107,255,0.15)];
+  }
+
+  /* 3D Button Style */
+  .btn-3d {
+    @apply relative overflow-hidden transition-all duration-200 ease-out;
+    transform-style: preserve-3d;
+    /* Simulate bevel and shadow */
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+      0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .btn-3d:active {
+    transform: translateY(2px);
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Light sweep on hover */
+  .btn-3d::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-[150%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-500 ease-in-out;
+  }
+  
+  .btn-3d:hover::after {
+    @apply translate-x-[150%];
+  }
+}
+
+/* Constellation Animation */
+@keyframes drift {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-50px) rotate(5deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .constellation-bg {
+    animation: drift 20s infinite alternate ease-in-out;
+  }
+}
+
+/* 3D specific utility */
+.preserve-3d {
+  transform-style: preserve-3d;
+}

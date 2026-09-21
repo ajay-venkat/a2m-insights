@@ -1,0 +1,8 @@
+node_modules/
+.env
+dist/
+.DS_Store
+a2m-insights/node_modules/
+a2m-insights/dist/
+a2m-insights-backend/node_modules/
+a2m-insights-backend/.env
