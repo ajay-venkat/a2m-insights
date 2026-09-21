@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Shield, Phone, MessageCircle, Moon, Sun, Laptop } from 'lucide-react';
+import { Menu, X, MessageCircle, Moon, Sun, Laptop } from 'lucide-react';
 import { config } from '../config';
 import { useTheme } from './ThemeContext';
 

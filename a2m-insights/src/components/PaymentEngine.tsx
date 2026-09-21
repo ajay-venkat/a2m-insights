@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { packages, webAddOns, studentAddOns } from '../content/packages';
 import { config } from '../config';
 import { createOrder, lookupOrder, verifyTestPayment, type OrderSummary } from '../api';
-import { ShieldCheck, QrCode, Search, Copy, Loader2, IndianRupee } from 'lucide-react';
+import { ShieldCheck, Search, Copy, Loader2, IndianRupee } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { FadeInDepth } from './3d/FadeInDepth';
 
@@ -29,7 +29,7 @@ export const PaymentEngine: React.FC = () => {
   const selectedPkg = packages.find(p => p.id === selectedPkgId) || packages[1];
   const billingModel = selectedPkg.billingModel;
   
-  const applicableAddOns = selectedPkg.category === 'Student Projects' ? studentAddOns : selectedPkg.category === 'Web & Software' ? webAddOns : [];
+  const applicableAddOns = selectedPkg.category === 'Student Projects' ? studentAddOns : selectedPkg.category === 'Web & App Development' ? webAddOns : [];
 
   // Reset tier and addons when package changes
   useEffect(() => {
@@ -499,7 +499,7 @@ export const PaymentEngine: React.FC = () => {
                        <div className="w-full h-px bg-slate-800 my-2"></div>
                        <p className="text-center text-sm font-semibold text-green-400 mb-2">Step 2: Send your details to our team</p>
                        <a 
-                         href={`https://wa.me/${config.PHONE_WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello A2M Insights!\nI just placed an order for ${selectedPackage.title} (${selectedTier.name}).\n*My Email:* ${clientDetails.email}\n*My Phone:* ${clientDetails.phone}\n*Project/Business:* ${clientDetails.business}\n*Notes:* ${clientDetails.notes || 'None'}\n\nPlease confirm!`)}`}
+                         href={`https://wa.me/${config.PHONE_WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello A2M Insights!\nI just placed an order for ${selectedPkg.title} (${selectedPkg.tiers.find(t => t.id === selectedTierId)?.name}).\n*My Email:* ${clientDetails.email}\n*My Phone:* ${clientDetails.phone}\n*Project/Business:* ${clientDetails.business}\n*Notes:* ${clientDetails.notes || 'None'}\n\nPlease confirm!`)}`}
                          target="_blank"
                          rel="noopener noreferrer"
                          className="btn-3d w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold text-lg flex justify-center items-center"

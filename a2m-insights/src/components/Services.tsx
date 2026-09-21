@@ -66,7 +66,7 @@ export const Services: React.FC = () => {
         {/* Package Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPackages.map((pkg) => {
-            const Icon = iconMap[pkg.iconName] || Code;
+            const Icon = (pkg.iconName && pkg.iconName in iconMap) ? iconMap[pkg.iconName as keyof typeof iconMap] : Code;
             
             return (
               <TiltCard key={pkg.id} className="h-full">
