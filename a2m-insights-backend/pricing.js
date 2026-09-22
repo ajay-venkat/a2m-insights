@@ -5,34 +5,34 @@ const ADVANCE_PERCENT = 40;
 
 const packages = [
   // --- WEB & APP DEVELOPMENT ---
-  { id: 'web_app_dev', tiers: [{ id: 'basic', price: 40000 }, { id: 'standard', price: 80000 }, { id: 'plus', price: 150000 }] },
-  { id: 'whatsapp_automation', tiers: [{ id: 'basic', price: 10000 }, { id: 'standard', price: 15000 }, { id: 'plus', price: 20000 }] },
-  { id: 'payment_portal', tiers: [{ id: 'basic', price: 15000 }, { id: 'standard', price: 25000 }, { id: 'plus', price: 35000 }] },
-  { id: 'ecommerce', tiers: [{ id: 'basic', price: 25000 }, { id: 'standard', price: 40000 }, { id: 'plus', price: 60000 }] },
-  { id: 'booking', tiers: [{ id: 'basic', price: 15000 }, { id: 'standard', price: 25000 }, { id: 'plus', price: 35000 }] },
-  { id: 'mobile_app_dev', tiers: [{ id: 'basic', price: 60000 }, { id: 'standard', price: 100000 }, { id: 'plus', price: 200000 }] },
-  { id: 'ui_ux_design', tiers: [{ id: 'basic', price: 20000 }, { id: 'standard', price: 40000 }, { id: 'plus', price: 60000 }] },
-  { id: 'software_testing', tiers: [{ id: 'basic', price: 15000 }, { id: 'standard', price: 25000 }, { id: 'plus', price: 40000 }] },
-  { id: 'software_maintenance', tiers: [{ id: 'basic', price: 10000 }, { id: 'standard', price: 20000 }, { id: 'plus', price: 30000 }] },
+  { id: 'web_app_dev', tiers: [{ id: 'basic', price: 25000 }, { id: 'standard', price: 45000 }, { id: 'plus', price: 80000 }] },
+  { id: 'whatsapp_automation', tiers: [{ id: 'basic', price: 5000 }, { id: 'standard', price: 9000 }, { id: 'plus', price: 15000 }] },
+  { id: 'payment_portal', tiers: [{ id: 'basic', price: 10000 }, { id: 'standard', price: 18000 }, { id: 'plus', price: 25000 }] },
+  { id: 'ecommerce', tiers: [{ id: 'basic', price: 15000 }, { id: 'standard', price: 30000 }, { id: 'plus', price: 50000 }] },
+  { id: 'booking', tiers: [{ id: 'basic', price: 10000 }, { id: 'standard', price: 18000 }, { id: 'plus', price: 25000 }] },
+  { id: 'mobile_app_dev', tiers: [{ id: 'basic', price: 35000 }, { id: 'standard', price: 65000 }, { id: 'plus', price: 120000 }] },
+  { id: 'ui_ux_design', tiers: [{ id: 'basic', price: 12000 }, { id: 'standard', price: 25000 }, { id: 'plus', price: 40000 }] },
+  { id: 'software_testing', tiers: [{ id: 'basic', price: 8000 }, { id: 'standard', price: 15000 }, { id: 'plus', price: 25000 }] },
+  { id: 'software_maintenance', tiers: [{ id: 'basic', price: 5000 }, { id: 'standard', price: 10000 }, { id: 'plus', price: 15000 }] },
 
   // --- DATA & AI ---
-  { id: 'ai_ml_solutions', tiers: [{ id: 'basic', price: 80000 }, { id: 'standard', price: 150000 }, { id: 'plus', price: 300000 }] },
-  { id: 'data_analytics', tiers: [{ id: 'basic', price: 50000 }, { id: 'standard', price: 90000 }, { id: 'plus', price: 150000 }] },
-  { id: 'automation_solutions', tiers: [{ id: 'basic', price: 30000 }, { id: 'standard', price: 50000 }, { id: 'plus', price: 80000 }] },
+  { id: 'ai_ml_solutions', tiers: [{ id: 'basic', price: 45000 }, { id: 'standard', price: 85000 }, { id: 'plus', price: 150000 }] },
+  { id: 'data_analytics', tiers: [{ id: 'basic', price: 25000 }, { id: 'standard', price: 45000 }, { id: 'plus', price: 80000 }] },
+  { id: 'automation_solutions', tiers: [{ id: 'basic', price: 15000 }, { id: 'standard', price: 30000 }, { id: 'plus', price: 50000 }] },
 
   // --- CLOUD & SECURITY ---
-  { id: 'cloud_solutions', tiers: [{ id: 'basic', price: 40000 }, { id: 'standard', price: 70000 }, { id: 'plus', price: 100000 }] },
-  { id: 'api_integration', tiers: [{ id: 'basic', price: 25000 }, { id: 'standard', price: 50000 }, { id: 'plus', price: 75000 }] },
-  { id: 'cybersecurity', tiers: [{ id: 'basic', price: 50000 }, { id: 'standard', price: 100000 }, { id: 'plus', price: 200000 }] },
+  { id: 'cloud_solutions', tiers: [{ id: 'basic', price: 25000 }, { id: 'standard', price: 45000 }, { id: 'plus', price: 70000 }] },
+  { id: 'api_integration', tiers: [{ id: 'basic', price: 15000 }, { id: 'standard', price: 30000 }, { id: 'plus', price: 50000 }] },
+  { id: 'cybersecurity', tiers: [{ id: 'basic', price: 25000 }, { id: 'standard', price: 50000 }, { id: 'plus', price: 100000 }] },
 
   // --- STUDENT PROJECTS ---
-  { id: 'final_year_project', tiers: [{ id: 'basic', price: 10000 }, { id: 'standard', price: 15000 }, { id: 'plus', price: 25000 }] },
+  { id: 'final_year_project', tiers: [{ id: 'basic', price: 6000 }, { id: 'standard', price: 10000 }, { id: 'plus', price: 18000 }] },
   
   // --- RESEARCH PAPERS ---
-  { id: 'research_submission', tiers: [{ id: 'standard', price: 1500 }] },
+  { id: 'research_submission', tiers: [{ id: 'standard', price: 1000 }] },
 
   // --- MARKETING & MANAGEMENT ---
-  { id: 'marketing_social', tiers: [{ id: 'standard', price: 4000 }] }
+  { id: 'marketing_social', tiers: [{ id: 'standard', price: 2500 }] }
 ];
 
 const webAddOns = [

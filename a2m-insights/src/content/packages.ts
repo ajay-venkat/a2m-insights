@@ -42,9 +42,9 @@ export const packages: Package[] = [
       'SEO & analytics ready'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 40000, description: 'Core features, up to 5 main screens' },
-      { id: 'standard', name: 'Professional', price: 80000, description: 'Advanced logic, admin dashboards' },
-      { id: 'plus', name: 'Enterprise', price: 150000, description: 'Complex integrations, scalable architecture' }
+      { id: 'basic', name: 'Starter', price: 25000, description: 'Core features, up to 5 main screens' },
+      { id: 'standard', name: 'Professional', price: 45000, description: 'Advanced logic, admin dashboards' },
+      { id: 'plus', name: 'Enterprise', price: 80000, description: 'Complex integrations, scalable architecture' }
     ]
   },
   {
@@ -62,9 +62,9 @@ export const packages: Package[] = [
       'Click-to-chat tracking'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 10000 },
-      { id: 'standard', name: 'Professional', price: 15000 },
-      { id: 'plus', name: 'Premium', price: 20000 }
+      { id: 'basic', name: 'Starter', price: 5000 },
+      { id: 'standard', name: 'Professional', price: 9000 },
+      { id: 'plus', name: 'Premium', price: 15000 }
     ]
   },
   {
@@ -82,9 +82,9 @@ export const packages: Package[] = [
       'Automated tax invoice PDF'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 15000 },
-      { id: 'standard', name: 'Professional', price: 25000 },
-      { id: 'plus', name: 'Premium', price: 35000 }
+      { id: 'basic', name: 'Starter', price: 10000 },
+      { id: 'standard', name: 'Professional', price: 18000 },
+      { id: 'plus', name: 'Premium', price: 25000 }
     ]
   },
   {
@@ -102,9 +102,9 @@ export const packages: Package[] = [
       'Order tracking & history'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 25000 },
-      { id: 'standard', name: 'Professional', price: 40000 },
-      { id: 'plus', name: 'Premium', price: 60000 }
+      { id: 'basic', name: 'Starter', price: 15000 },
+      { id: 'standard', name: 'Professional', price: 30000 },
+      { id: 'plus', name: 'Premium', price: 50000 }
     ]
   },
   {
@@ -122,9 +122,9 @@ export const packages: Package[] = [
       'Advance payment collection'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 15000 },
-      { id: 'standard', name: 'Professional', price: 25000 },
-      { id: 'plus', name: 'Premium', price: 35000 }
+      { id: 'basic', name: 'Starter', price: 10000 },
+      { id: 'standard', name: 'Professional', price: 18000 },
+      { id: 'plus', name: 'Premium', price: 25000 }
     ]
   },
   {
@@ -143,9 +143,9 @@ export const packages: Package[] = [
       'Device hardware integration'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 60000, description: 'Basic UI/UX, cross-platform' },
-      { id: 'standard', name: 'Professional', price: 100000, description: 'Advanced state, complex animations' },
-      { id: 'plus', name: 'Enterprise', price: 200000, description: 'Native code, high-performance needs' }
+      { id: 'basic', name: 'Starter', price: 35000, description: 'Basic UI/UX, cross-platform' },
+      { id: 'standard', name: 'Professional', price: 65000, description: 'Advanced state, complex animations' },
+      { id: 'plus', name: 'Enterprise', price: 120000, description: 'Native code, high-performance needs' }
     ]
   },
   {
@@ -164,9 +164,9 @@ export const packages: Package[] = [
       'Developer handoff'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 20000, description: 'Up to 10 screens' },
-      { id: 'standard', name: 'Professional', price: 40000, description: 'Full app flow, interactive prototype' },
-      { id: 'plus', name: 'Enterprise', price: 60000, description: 'Complete design system & branding' }
+      { id: 'basic', name: 'Starter', price: 12000, description: 'Up to 10 screens' },
+      { id: 'standard', name: 'Professional', price: 25000, description: 'Full app flow, interactive prototype' },
+      { id: 'plus', name: 'Enterprise', price: 40000, description: 'Complete design system & branding' }
     ]
   },
   {
@@ -185,9 +185,9 @@ export const packages: Package[] = [
       'Detailed bug reports'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 15000, description: 'Manual QA + Basic checks' },
-      { id: 'standard', name: 'Professional', price: 25000, description: 'Automated test suites' },
-      { id: 'plus', name: 'Enterprise', price: 40000, description: 'Load testing & CI/CD integration' }
+      { id: 'basic', name: 'Starter', price: 8000, description: 'Manual QA + Basic checks' },
+      { id: 'standard', name: 'Professional', price: 15000, description: 'Automated test suites' },
+      { id: 'plus', name: 'Enterprise', price: 25000, description: 'Load testing & CI/CD integration' }
     ]
   },
   {
@@ -206,9 +206,9 @@ export const packages: Package[] = [
       'Monthly optimization report'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 10000, description: 'Uptime monitoring & minor fixes' },
-      { id: 'standard', name: 'Professional', price: 20000, description: 'Active feature updates & fast SLA' },
-      { id: 'plus', name: 'Enterprise', price: 30000, description: '24/7 priority support' }
+      { id: 'basic', name: 'Starter', price: 5000, description: 'Uptime monitoring & minor fixes' },
+      { id: 'standard', name: 'Professional', price: 10000, description: 'Active feature updates & fast SLA' },
+      { id: 'plus', name: 'Enterprise', price: 15000, description: '24/7 priority support' }
     ]
   },
 
@@ -230,9 +230,9 @@ export const packages: Package[] = [
       'API deployment for inference'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 80000, description: 'Pre-trained model API integrations' },
-      { id: 'standard', name: 'Professional', price: 150000, description: 'Custom model training & deployment' },
-      { id: 'plus', name: 'Enterprise', price: 300000, description: 'Large-scale architecture & MLOps' }
+      { id: 'basic', name: 'Starter', price: 45000, description: 'Pre-trained model API integrations' },
+      { id: 'standard', name: 'Professional', price: 85000, description: 'Custom model training & deployment' },
+      { id: 'plus', name: 'Enterprise', price: 150000, description: 'Large-scale architecture & MLOps' }
     ]
   },
   {
@@ -251,9 +251,9 @@ export const packages: Package[] = [
       'Automated reporting'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 50000, description: 'Basic data cleaning & 3 dashboards' },
-      { id: 'standard', name: 'Professional', price: 90000, description: 'Automated ETL pipelines' },
-      { id: 'plus', name: 'Enterprise', price: 150000, description: 'Real-time analytics architecture' }
+      { id: 'basic', name: 'Starter', price: 25000, description: 'Basic data cleaning & 3 dashboards' },
+      { id: 'standard', name: 'Professional', price: 45000, description: 'Automated ETL pipelines' },
+      { id: 'plus', name: 'Enterprise', price: 80000, description: 'Real-time analytics architecture' }
     ]
   },
   {
@@ -272,9 +272,9 @@ export const packages: Package[] = [
       'Error monitoring'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 30000, description: 'Up to 5 automated workflows' },
-      { id: 'standard', name: 'Professional', price: 50000, description: 'Complex conditional logic & custom scripts' },
-      { id: 'plus', name: 'Enterprise', price: 80000, description: 'Full business process automation' }
+      { id: 'basic', name: 'Starter', price: 15000, description: 'Up to 5 automated workflows' },
+      { id: 'standard', name: 'Professional', price: 30000, description: 'Complex conditional logic & custom scripts' },
+      { id: 'plus', name: 'Enterprise', price: 50000, description: 'Full business process automation' }
     ]
   },
 
@@ -295,9 +295,9 @@ export const packages: Package[] = [
       'Cost optimization'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 40000, description: 'Basic VPS/Serverless setup' },
-      { id: 'standard', name: 'Professional', price: 70000, description: 'Containerized architecture' },
-      { id: 'plus', name: 'Enterprise', price: 100000, description: 'Multi-region HA deployments' }
+      { id: 'basic', name: 'Starter', price: 25000, description: 'Basic VPS/Serverless setup' },
+      { id: 'standard', name: 'Professional', price: 45000, description: 'Containerized architecture' },
+      { id: 'plus', name: 'Enterprise', price: 70000, description: 'Multi-region HA deployments' }
     ]
   },
   {
@@ -316,9 +316,9 @@ export const packages: Package[] = [
       'API documentation'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 25000, description: 'Simple third-party integrations' },
-      { id: 'standard', name: 'Professional', price: 50000, description: 'Custom API development' },
-      { id: 'plus', name: 'Enterprise', price: 75000, description: 'Microservices orchestration' }
+      { id: 'basic', name: 'Starter', price: 15000, description: 'Simple third-party integrations' },
+      { id: 'standard', name: 'Professional', price: 30000, description: 'Custom API development' },
+      { id: 'plus', name: 'Enterprise', price: 50000, description: 'Microservices orchestration' }
     ]
   },
   {
@@ -337,9 +337,9 @@ export const packages: Package[] = [
       'Incident response planning'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 50000, description: 'Basic vulnerability scan' },
-      { id: 'standard', name: 'Professional', price: 100000, description: 'Deep penetration testing & fixes' },
-      { id: 'plus', name: 'Enterprise', price: 200000, description: 'Compliance auditing (HIPAA/PCI)' }
+      { id: 'basic', name: 'Starter', price: 25000, description: 'Basic vulnerability scan' },
+      { id: 'standard', name: 'Professional', price: 50000, description: 'Deep penetration testing & fixes' },
+      { id: 'plus', name: 'Enterprise', price: 100000, description: 'Compliance auditing (HIPAA/PCI)' }
     ]
   },
 
@@ -360,9 +360,9 @@ export const packages: Package[] = [
       'No plagiarism / non-resold code'
     ],
     tiers: [
-      { id: 'basic', name: 'Starter', price: 10000, description: 'Basic CRUD / Management Systems' },
-      { id: 'standard', name: 'Professional', price: 15000, description: 'Machine Learning / IoT Integrations' },
-      { id: 'plus', name: 'Premium', price: 25000, description: 'Advanced AI/Blockchain/Cloud Projects' }
+      { id: 'basic', name: 'Starter', price: 6000, description: 'Basic CRUD / Management Systems' },
+      { id: 'standard', name: 'Professional', price: 10000, description: 'Machine Learning / IoT Integrations' },
+      { id: 'plus', name: 'Premium', price: 18000, description: 'Advanced AI/Blockchain/Cloud Projects' }
     ]
   },
   
@@ -376,7 +376,7 @@ export const packages: Package[] = [
     description: 'Guidance on selecting venues and successfully navigating submission portals.',
     iconName: 'Send',
     tiers: [
-      { id: 'standard', name: 'Standard', price: 1500 }
+      { id: 'standard', name: 'Standard', price: 1000 }
     ],
     features: [
       'Submission portal guidance',
@@ -395,7 +395,7 @@ export const packages: Package[] = [
     description: 'Consistent, engaging content to grow your audience and brand presence.',
     iconName: 'Share2',
     tiers: [
-      { id: 'standard', name: 'Standard', price: 4000 }
+      { id: 'standard', name: 'Standard', price: 2500 }
     ],
     features: [
       'Content calendar',
