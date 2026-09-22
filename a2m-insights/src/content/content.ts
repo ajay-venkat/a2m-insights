@@ -1,4 +1,7 @@
 import { config } from '../config';
+import edutechImg from '../assets/edutech.png';
+import retailImg from '../assets/retail.png';
+import clinicImg from '../assets/clinic.png';
 
 export const content = {
   hero: {
@@ -20,7 +23,7 @@ export const content = {
       city: 'Chennai',
       deliveryTime: '21 Days',
       outcomes: ['300% increase in student engagement', 'Integrated video streaming', 'Automated certification'],
-      imagePlaceholder: 'EduTech LMS'
+      image: edutechImg
     },
     {
       title: 'Boutique E-Commerce',
@@ -28,7 +31,7 @@ export const content = {
       city: 'Bengaluru',
       deliveryTime: '14 Days',
       outcomes: ['Sub-second page loads', 'Custom cart checkout', 'Razorpay split payments'],
-      imagePlaceholder: 'Retail Store'
+      image: retailImg
     },
     {
       title: 'Clinic Appointment System',
@@ -36,7 +39,7 @@ export const content = {
       city: 'Coimbatore',
       deliveryTime: '10 Days',
       outcomes: ['Zero double-bookings', 'WhatsApp patient reminders', 'Doctors dashboard'],
-      imagePlaceholder: 'Clinic Portal'
+      image: clinicImg
     }
   ],
   testimonials: [

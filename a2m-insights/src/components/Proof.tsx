@@ -19,12 +19,14 @@ export const Proof: React.FC = () => {
           {content.projects.map((project, idx) => (
             <TiltCard key={idx} className="h-full">
               <div className="glass-card overflow-hidden flex flex-col group h-full">
-                {/* Image Placeholder */}
+                {/* Project Image */}
                 <div className="h-48 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-accent/5 group-hover:bg-accent/10 transition-colors"></div>
-                  <span className="text-slate-500 dark:text-slate-500 font-medium tracking-wide">
-                    [{project.imagePlaceholder}]
-                  </span>
+                  <div className="absolute inset-0 bg-accent/5 group-hover:bg-accent/10 transition-colors z-10 pointer-events-none"></div>
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+                  />
                 </div>
                 
                 <div className="p-6 flex-1 flex flex-col">
