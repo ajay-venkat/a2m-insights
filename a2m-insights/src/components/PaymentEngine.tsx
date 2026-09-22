@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { packages, webAddOns, studentAddOns } from '../content/packages';
+import { validatePromoCode } from '../content/promoCodes';
 import { config } from '../config';
 import { lookupOrder, type OrderSummary } from '../api';
 import { ShieldCheck, Search, Copy, Loader2, IndianRupee } from 'lucide-react';
@@ -33,6 +34,9 @@ export const PaymentEngine: React.FC = () => {
   
   const [receiptStage, setReceiptStage] = useState<ReceiptStage>('idle');
   const [now] = useState(() => new Date());
+
+  const [promoCodeInput, setPromoCodeInput] = useState('');
+  const [promoResult, setPromoResult] = useState<{ isValid: boolean; discountAmount: (basePrice: number) => number; error?: string }>({ isValid: false, discountAmount: () => 0 });
 
   useEffect(() => {
     if (receiptStage === "processing") {
@@ -89,9 +93,47 @@ export const PaymentEngine: React.FC = () => {
     return base;
   };
 
-  const displayTotal = computeDisplayPrice();
-  const displayAdvance = billingModel === 'milestone_40_60' ? Math.round(displayTotal * (config.ADVANCE_PERCENT / 100)) : displayTotal;
-  const displayBalance = billingModel === 'milestone_40_60' ? displayTotal - displayAdvance : 0;
+  const handlePromoCheck = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!promoCodeInput.trim()) {
+      setPromoResult({ isValid: false, discountAmount: () => 0 });
+      return;
+    }
+    const result = validatePromoCode(promoCodeInput.trim(), selectedPkg.category);
+    setPromoResult(result);
+  };
+
+  let rawTotal = computeDisplayPrice();
+  let discountAmount = 0;
+  if (promoResult.isValid) {
+    discountAmount = promoResult.discountAmount(rawTotal);
+  }
+  const displayTotal = Math.max(0, rawTotal - discountAmount);
+
+  let displayAdvance = displayTotal; // Default for single/retainer
+  
+  if (billingModel === 'milestone_40_60') {
+    displayAdvance = Math.floor(displayTotal * (config.ADVANCE_PERCENT / 100));
+  } else if (billingModel === 'mixed_bundle') {
+    let milestonePart = 0;
+    let retainerPart = 0;
+    selectedPkg.bundleConfig?.items.forEach(item => {
+      const basePkg = packages.find(p => p.id === item.packageId);
+      if (basePkg) {
+        const baseTier = basePkg.tiers.find(t => t.id === item.tierId);
+        if (baseTier) {
+          if (basePkg.billingModel === 'monthly_retainer') retainerPart += baseTier.price;
+          else milestonePart += baseTier.price;
+        }
+      }
+    });
+    const originalPrice = selectedPkg.tiers[0].originalPrice || 1;
+    const ratio = displayTotal / originalPrice; // Adjust parts based on any promo discount over the bundle discount
+    milestonePart *= ratio;
+    retainerPart *= ratio;
+    displayAdvance = Math.floor(milestonePart * (config.ADVANCE_PERCENT / 100)) + Math.floor(retainerPart);
+  }
+  const displayBalance = (billingModel === 'milestone_40_60' || billingModel === 'mixed_bundle') ? displayTotal - displayAdvance : 0;
 
   const handleAddOnToggle = (id: string) => {
     setSelectedAddOns(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]);
@@ -221,11 +263,37 @@ export const PaymentEngine: React.FC = () => {
       </div>
       <textarea placeholder="Project Notes (Optional)" rows={3} value={clientDetails.notes} onChange={e => setClientDetails({...clientDetails, notes: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-accent outline-none text-slate-900 dark:text-white resize-none"></textarea>
       
+      <div className="mt-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Have a Promo Code?</label>
+        <div className="flex gap-2">
+          <input 
+            type="text" 
+            placeholder="Enter code" 
+            value={promoCodeInput}
+            onChange={(e) => {
+              setPromoCodeInput(e.target.value);
+              if (!e.target.value) setPromoResult({ isValid: false, discountAmount: () => 0 });
+            }}
+            className="flex-1 px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-accent outline-none text-slate-900 dark:text-white uppercase"
+          />
+          <button type="button" onClick={handlePromoCheck} className="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg font-bold transition-colors">
+            Apply
+          </button>
+        </div>
+        {promoResult.error && promoCodeInput && (
+          <p className="text-red-500 text-sm mt-2">{promoResult.error}</p>
+        )}
+        {promoResult.isValid && (
+          <p className="text-success text-sm mt-2 font-bold">Promo code applied! Saved ₹{discountAmount.toLocaleString()}</p>
+        )}
+      </div>
+      
       <label className="flex items-start mt-4 cursor-pointer">
         <input required type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="mt-1 w-4 h-4 rounded border-slate-300 text-accent focus:ring-accent" />
         <span className="ml-3 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
           I have read and agree to the <a href="/terms" className="text-accent hover:underline">Terms of Service</a> and <a href="/refund" className="text-accent hover:underline">Refund Policy</a>.
           {billingModel === 'monthly_retainer' && <strong className="block mt-1 text-amber-600 dark:text-amber-500">I understand I will be automatically billed ₹{displayTotal.toLocaleString()} on this date each month until cancelled.</strong>}
+          {billingModel === 'mixed_bundle' && <strong className="block mt-1 text-amber-600 dark:text-amber-500">I understand the retainer portion of this bundle will be automatically billed each month until cancelled.</strong>}
         </span>
       </label>
     </div>

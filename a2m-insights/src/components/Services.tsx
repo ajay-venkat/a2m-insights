@@ -15,7 +15,8 @@ const CATEGORIES: ServiceCategory[] = [
   'Cloud & Security',
   'Student Projects',
   'Research Papers',
-  'Marketing & Management'
+  'Marketing & Management',
+  'Combo Deals'
 ];
 
 export const Services: React.FC = () => {
@@ -98,7 +99,7 @@ export const Services: React.FC = () => {
                 {/* Price Display */}
                 <div className="mb-6 pb-6 border-b border-slate-200 dark:border-borderline">
                   <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mb-2">
-                    {pkg.billingModel === 'monthly_retainer' ? 'Monthly Retainer' : pkg.billingModel === 'single_payment' ? 'Single Payment' : pkg.billingModel === 'free' ? 'Free Service' : 'Starting From'}
+                    {pkg.billingModel === 'monthly_retainer' ? 'Monthly Retainer' : pkg.billingModel === 'single_payment' ? 'Single Payment' : pkg.billingModel === 'mixed_bundle' ? 'Mixed Bundle' : pkg.billingModel === 'free' ? 'Free Service' : 'Starting From'}
                   </p>
                   <div className="flex items-baseline text-slate-900 dark:text-white">
                     {pkg.billingModel === 'free' ? (
@@ -116,6 +117,11 @@ export const Services: React.FC = () => {
                           {pkg.tiers[0].price.toLocaleString()}
                           {pkg.tiers[0].maxPrice ? ` - ${pkg.tiers[0].maxPrice.toLocaleString()}` : ''}
                         </span>
+                        {pkg.tiers[0].originalPrice && (
+                          <span className="ml-3 text-lg text-slate-400 line-through font-medium">
+                            ₹{pkg.tiers[0].originalPrice.toLocaleString()}
+                          </span>
+                        )}
                         {pkg.billingModel === 'monthly_retainer' && <span className="text-sm text-slate-500 ml-1 font-medium">/mo</span>}
                       </>
                     )}
