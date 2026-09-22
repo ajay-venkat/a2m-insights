@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { packages, webAddOns, studentAddOns } from '../content/packages';
 import { config } from '../config';
-import { createOrder, lookupOrder, verifyTestPayment, type OrderSummary } from '../api';
+import { lookupOrder, type OrderSummary } from '../api';
 import { ShieldCheck, Search, Copy, Loader2, IndianRupee } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { FadeInDepth } from './3d/FadeInDepth';
 
+// Generate a short client-side order ID like A2M-260922-X3K7
+const generateOrderId = (): string => {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const yy = String(now.getFullYear()).slice(-2);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let suffix = '';
+  for (let i = 0; i < 4; i++) suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+  return `A2M-${yy}${mm}${dd}-${suffix}`;
+};
+
 export const PaymentEngine: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'advance' | 'balance'>('advance');
-  const [selectedPkgId, setSelectedPkgId] = useState<string>('landing_page');
+  const [selectedPkgId, setSelectedPkgId] = useState<string>('web_app_dev');
   const [selectedTierId, setSelectedTierId] = useState<string>('basic');
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [customAmount, setCustomAmount] = useState<number>(config.MIN_CUSTOM_BUDGET);
@@ -17,7 +29,6 @@ export const PaymentEngine: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderAmount, setOrderAmount] = useState<number>(0);
-  const [rzpInstance, setRzpInstance] = useState<any>(null);
   
   // Balance Lookup State
   const [lookupId, setLookupId] = useState('');
@@ -26,7 +37,7 @@ export const PaymentEngine: React.FC = () => {
   const [lookupError, setLookupError] = useState('');
 
   // Selected Package Info
-  const selectedPkg = packages.find(p => p.id === selectedPkgId) || packages[1];
+  const selectedPkg = packages.find(p => p.id === selectedPkgId) || packages[0];
   const billingModel = selectedPkg.billingModel;
   
   const applicableAddOns = selectedPkg.category === 'Student Projects' ? studentAddOns : selectedPkg.category === 'Web & App Development' ? webAddOns : [];
@@ -51,7 +62,7 @@ export const PaymentEngine: React.FC = () => {
     return () => window.removeEventListener('selectPackage', handleSelect);
   }, []);
 
-  // Compute live price on client for display only (server will recompute)
+  // Compute live price on client
   const computeDisplayPrice = () => {
     if (selectedPkg.isCustom) return customAmount;
     const tier = selectedPkg.tiers.find(t => t.id === selectedTierId);
@@ -78,75 +89,15 @@ export const PaymentEngine: React.FC = () => {
     
     setIsSubmitting(true);
     try {
-      // 1. Create order on our Node backend
-      const result = await createOrder({
-        packageId: selectedPkgId,
-        tierId: selectedTierId,
-        addOnIds: selectedAddOns,
-        customAmount: selectedPkg.isCustom ? customAmount : undefined,
-        billingModel: billingModel,
-        clientDetails
-      });
-      
-      setOrderId(result.orderId);
-      setOrderAmount(result.amountDue);
+      // Generate a client-side order ID and compute amount locally
+      const newOrderId = generateOrderId();
+      const amountDue = displayAdvance;
 
-      // Force body overflow to visible in case Razorpay script bugs out
-      document.body.style.overflow = 'auto';
-
-      // 2. Setup Razorpay Checkout Modal
-      const options = {
-        key: result.keyId,
-        amount: result.amountDue * 100, // paise
-        currency: 'INR',
-        name: config.BRAND_NAME,
-        description: selectedPkg.title,
-        order_id: result.orderId,
-        handler: async function (response: any) {
-          try {
-            await verifyTestPayment(result.orderId);
-            alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
-            // Reset state or redirect on success
-          } catch (e) {
-            console.error(e);
-          }
-        },
-        prefill: {
-          name: clientDetails.name,
-          email: clientDetails.email,
-          contact: clientDetails.phone
-        },
-        theme: {
-          color: '#2F6BFF' // Accent color
-        },
-        modal: {
-          ondismiss: function() {
-             console.log("Checkout form closed");
-          }
-        }
-      };
-
-      if ((window as any).Razorpay) {
-        const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-          alert(`Payment Failed: ${response.error.description}`);
-        });
-        setRzpInstance(rzp);
-        
-        // We will NOT automatically call rzp.open() here because if the popup gets blocked 
-        // by the browser, Razorpay's script permanently locks the body scroll.
-        // The user must explicitly click "Open Razorpay Gateway".
-        
-        // Force scroll reset just in case
-        document.body.style.overflow = 'auto';
-      } else {
-        alert("Razorpay SDK failed to load. Are you using an ad blocker?");
-      }
-
+      setOrderId(newOrderId);
+      setOrderAmount(amountDue);
     } catch (err: any) {
       console.error("Checkout Error:", err);
-      alert(`Error: ${err.message || err || 'Failed to create order'}`);
-      document.body.style.overflow = 'auto'; // ensure scroll is restored
+      alert(`Error: ${err.message || err || 'Something went wrong'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -478,28 +429,25 @@ export const PaymentEngine: React.FC = () => {
                          />
                        </div>
                        <p className="text-center text-sm text-slate-400">
-                         Scan with any UPI App (GPay, PhonePe, Paytm) to pay securely. No extra fees.
+                         Scan with any UPI App (GPay, PhonePe, Paytm) to pay ₹{orderAmount.toLocaleString()} securely. No extra fees.
                        </p>
-                       <div className="w-full h-px bg-slate-800 my-2"></div>
-                       <p className="text-center text-sm text-slate-400 mb-2">Or pay via cards/netbanking:</p>
-                       <button 
-                         type="button" 
-                         onClick={() => {
-                           if (rzpInstance) {
-                             document.body.style.overflow = 'hidden'; // Razorpay expects this
-                             rzpInstance.open();
-                           } else {
-                             alert("Please refresh the page and try again.");
-                           }
-                         }}
-                         className="btn-3d w-full bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 py-3 rounded-xl font-bold flex justify-center items-center"
-                       >
-                         Open Razorpay Gateway
-                       </button>
-                       <div className="w-full h-px bg-slate-800 my-2"></div>
-                       <p className="text-center text-sm font-semibold text-green-400 mb-2">Step 2: Send your details to our team</p>
+                       <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 text-center">
+                         <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mb-1">UPI ID</p>
+                         <div className="flex items-center justify-center space-x-2">
+                           <code className="text-sm font-mono font-bold text-accent">{config.UPI_ID}</code>
+                           <button 
+                             onClick={() => navigator.clipboard.writeText(config.UPI_ID)}
+                             className="p-1 text-slate-400 hover:text-accent transition-colors"
+                             title="Copy UPI ID"
+                           >
+                             <Copy size={14} />
+                           </button>
+                         </div>
+                       </div>
+                       <div className="w-full h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
+                       <p className="text-center text-sm font-semibold text-green-400 mb-2">Step 2: Confirm payment via WhatsApp</p>
                        <a 
-                         href={`https://wa.me/${config.PHONE_WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello A2M Insights!\nI just placed an order for ${selectedPkg.title} (${selectedPkg.tiers.find(t => t.id === selectedTierId)?.name}).\n*My Email:* ${clientDetails.email}\n*My Phone:* ${clientDetails.phone}\n*Project/Business:* ${clientDetails.business}\n*Notes:* ${clientDetails.notes || 'None'}\n\nPlease confirm!`)}`}
+                         href={`https://wa.me/${config.PHONE_WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello A2M Insights!\nI just paid ₹${orderAmount.toLocaleString()} via UPI for:\n*Package:* ${selectedPkg.title} (${selectedPkg.tiers.find(t => t.id === selectedTierId)?.name})\n*Order Ref:* ${orderId}\n*My Name:* ${clientDetails.name}\n*My Email:* ${clientDetails.email}\n*My Phone:* ${clientDetails.phone}\n*Project/Business:* ${clientDetails.business}\n*Notes:* ${clientDetails.notes || 'None'}\n\nPlease confirm receipt!`)}`}
                          target="_blank"
                          rel="noopener noreferrer"
                          className="btn-3d w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold text-lg flex justify-center items-center"
