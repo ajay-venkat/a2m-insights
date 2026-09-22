@@ -3,8 +3,8 @@ import { packages, webAddOns, studentAddOns } from '../content/packages';
 import { config } from '../config';
 import { lookupOrder, type OrderSummary } from '../api';
 import { ShieldCheck, Search, Copy, Loader2, IndianRupee } from 'lucide-react';
-import QRCode from 'react-qr-code';
 import { FadeInDepth } from './3d/FadeInDepth';
+import { ReceiptPrinterUI, type ReceiptStage } from './ReceiptPrinterUI';
 
 // Generate a short client-side order ID like A2M-260922-X3K7
 const generateOrderId = (): string => {
@@ -29,6 +29,20 @@ export const PaymentEngine: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderAmount, setOrderAmount] = useState<number>(0);
+  
+  const [receiptStage, setReceiptStage] = useState<ReceiptStage>('idle');
+  const [now] = useState(() => new Date());
+
+  useEffect(() => {
+    if (receiptStage === "processing") {
+      const t = setTimeout(() => setReceiptStage("printing"), 1400);
+      return () => clearTimeout(t);
+    }
+    if (receiptStage === "printing") {
+      const t = setTimeout(() => setReceiptStage("complete"), 1900);
+      return () => clearTimeout(t);
+    }
+  }, [receiptStage]);
   
   // Balance Lookup State
   const [lookupId, setLookupId] = useState('');
@@ -95,6 +109,7 @@ export const PaymentEngine: React.FC = () => {
 
       setOrderId(newOrderId);
       setOrderAmount(amountDue);
+      setReceiptStage('processing');
     } catch (err: any) {
       console.error("Checkout Error:", err);
       alert(`Error: ${err.message || err || 'Something went wrong'}`);
@@ -421,39 +436,46 @@ export const PaymentEngine: React.FC = () => {
                   </div>
 
                   {orderId ? (
-                     <div className="flex flex-col items-center space-y-6">
-                       <div className="bg-white p-4 rounded-xl shadow-sm">
-                         <QRCode 
-                           value={`upi://pay?pa=${config.UPI_ID}&pn=${encodeURIComponent(config.BRAND_NAME)}&am=${orderAmount}&cu=INR`}
-                           size={200}
-                         />
-                       </div>
-                       <p className="text-center text-sm text-slate-400">
-                         Scan with any UPI App (GPay, PhonePe, Paytm) to pay ₹{orderAmount.toLocaleString()} securely. No extra fees.
-                       </p>
-                       <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 text-center">
-                         <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mb-1">UPI ID</p>
-                         <div className="flex items-center justify-center space-x-2">
-                           <code className="text-sm font-mono font-bold text-accent">{config.UPI_ID}</code>
-                           <button 
-                             onClick={() => navigator.clipboard.writeText(config.UPI_ID)}
-                             className="p-1 text-slate-400 hover:text-accent transition-colors"
-                             title="Copy UPI ID"
+                     <div className="flex flex-col items-center space-y-6 overflow-hidden pt-4 pb-2">
+                       <ReceiptPrinterUI 
+                         stage={receiptStage}
+                         orderId={orderId}
+                         amount={orderAmount}
+                         clientName={clientDetails.name}
+                         packageName={selectedPkg.title}
+                         tierName={selectedPkg.tiers.find(t => t.id === selectedTierId)?.name || ''}
+                         addOns={selectedAddOns.map(id => applicableAddOns.find(a => a.id === id)).filter(Boolean) as any}
+                         now={now}
+                       />
+                       
+                       {receiptStage === 'complete' && (
+                         <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+                           <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 text-center mb-6 w-full max-w-sm">
+                             <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mb-1">Copy UPI ID</p>
+                             <div className="flex items-center justify-center space-x-2">
+                               <code className="text-sm font-mono font-bold text-accent">{config.UPI_ID}</code>
+                               <button 
+                                 onClick={() => navigator.clipboard.writeText(config.UPI_ID)}
+                                 className="p-1 text-slate-400 hover:text-accent transition-colors"
+                                 title="Copy UPI ID"
+                               >
+                                 <Copy size={14} />
+                               </button>
+                             </div>
+                           </div>
+                           
+                           <div className="w-full max-w-sm h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
+                           <p className="text-center text-sm font-semibold text-green-400 mb-2 mt-4">Step 2: Confirm payment via WhatsApp</p>
+                           <a 
+                             href={`https://wa.me/${config.PHONE_WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello A2M Insights!\nI just paid ₹${orderAmount.toLocaleString()} via UPI for:\n*Package:* ${selectedPkg.title} (${selectedPkg.tiers.find(t => t.id === selectedTierId)?.name})\n*Order Ref:* ${orderId}\n*My Name:* ${clientDetails.name}\n*My Email:* ${clientDetails.email}\n*My Phone:* ${clientDetails.phone}\n*Project/Business:* ${clientDetails.business}\n*Notes:* ${clientDetails.notes || 'None'}\n\nPlease confirm receipt!`)}`}
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             className="btn-3d w-full max-w-sm bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold text-lg flex justify-center items-center"
                            >
-                             <Copy size={14} />
-                           </button>
+                             Confirm Order via WhatsApp
+                           </a>
                          </div>
-                       </div>
-                       <div className="w-full h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
-                       <p className="text-center text-sm font-semibold text-green-400 mb-2">Step 2: Confirm payment via WhatsApp</p>
-                       <a 
-                         href={`https://wa.me/${config.PHONE_WHATSAPP.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello A2M Insights!\nI just paid ₹${orderAmount.toLocaleString()} via UPI for:\n*Package:* ${selectedPkg.title} (${selectedPkg.tiers.find(t => t.id === selectedTierId)?.name})\n*Order Ref:* ${orderId}\n*My Name:* ${clientDetails.name}\n*My Email:* ${clientDetails.email}\n*My Phone:* ${clientDetails.phone}\n*Project/Business:* ${clientDetails.business}\n*Notes:* ${clientDetails.notes || 'None'}\n\nPlease confirm receipt!`)}`}
-                         target="_blank"
-                         rel="noopener noreferrer"
-                         className="btn-3d w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold text-lg flex justify-center items-center"
-                       >
-                         Confirm Order via WhatsApp
-                       </a>
+                       )}
                      </div>
                   ) : (
                     <button 
