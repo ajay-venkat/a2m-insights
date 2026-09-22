@@ -1,6 +1,5 @@
 import React from 'react';
 import { Loader2, CheckCircle2 } from 'lucide-react';
-import QRCode from 'react-qr-code';
 import { config } from '../config';
 
 export type ReceiptStage = 'idle' | 'processing' | 'printing' | 'complete';
@@ -129,8 +128,6 @@ const Receipt: React.FC<Omit<ReceiptPrinterUIProps, 'stage'>> = ({
   addOns,
   now
 }) => {
-  const upiString = `upi://pay?pa=${config.UPI_ID}&pn=${encodeURIComponent(config.BRAND_NAME)}&am=${amount}&cu=INR`;
-  
   return (
     <div
       className="mx-auto px-5 pt-6 pb-8 font-mono text-xs leading-relaxed shadow-lg"
@@ -190,15 +187,12 @@ const Receipt: React.FC<Omit<ReceiptPrinterUIProps, 'stage'>> = ({
       <div className="border-t border-dashed my-2" style={{ borderColor: `${COLORS.ink}55` }} />
 
       <div className="flex flex-col items-center mt-6 mb-1">
-        <div className="bg-white p-2 rounded-lg border border-slate-200">
-          <QRCode value={upiString} size={110} />
+        <div className="border-2 border-slate-900 px-4 py-2 rounded-sm rotate-[-5deg]">
+          <p className="text-center font-black text-sm tracking-widest uppercase">
+            PAID IN FULL
+          </p>
+          <p className="text-[10px] text-center font-bold">PENDING VERIFICATION</p>
         </div>
-        <p className="mt-3 text-center font-bold text-sm">
-          Scan to Pay Securely
-        </p>
-        <p className="mt-1 text-center" style={{ color: COLORS.inkSoft }}>
-          UPI ID: {config.UPI_ID}
-        </p>
       </div>
     </div>
   );
